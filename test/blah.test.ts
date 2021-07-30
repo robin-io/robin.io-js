@@ -8,7 +8,7 @@ describe('initialize robin', () => {
   });
 });
 
-describe('create user token & get User token', () => {
+describe('create user token & get User token & sync user token', () => {
   it('works', async () => {
     let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
     let user_token = await robin.createUserToken({
@@ -28,5 +28,14 @@ describe('create user token & get User token', () => {
     // console.log(get_user, "here")
 
     expect(get_user.error).toEqual(false);
+
+    let syncUser = await robin.syncUserToken({
+      user_token: user_token.data.user_token, 
+      meta_data: { 
+        name: 'Elvis'
+      }
+    });
+
+    expect(syncUser.error).toEqual(false);
   });
 });
