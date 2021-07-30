@@ -42,6 +42,15 @@ export class Robin {
   }
 
   async syncUserToken(data: UserToken) {
-    console.log(data);
+    try {
+      let response = await axios.put(
+        this.baseUrl + '/chat/user_token/' + data.user_token,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
   }
 }
