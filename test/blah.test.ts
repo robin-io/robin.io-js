@@ -30,10 +30,10 @@ describe('create user token & get User token & sync user token', () => {
     expect(get_user.error).toEqual(false);
 
     let syncUser = await robin.syncUserToken({
-      user_token: user_token.data.user_token, 
-      meta_data: { 
-        name: 'Elvis'
-      }
+      user_token: user_token.data.user_token,
+      meta_data: {
+        name: 'Elvis',
+      },
     });
 
     expect(syncUser.error).toEqual(false);
