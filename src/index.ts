@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { UserToken } from './types';
+import { UserToken, Conversation } from './types';
 
 export class Robin {
   apiKey: string;
@@ -47,6 +47,16 @@ export class Robin {
         this.baseUrl + '/chat/user_token/' + data.user_token,
         data
       );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
+  async createConversation(data: Conversation) {
+    try {
+      let response = await axios.post(this.baseUrl + '/conversation', data);
       return response.data;
     } catch (error) {
       console.log(error);
