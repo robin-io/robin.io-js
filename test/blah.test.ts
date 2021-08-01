@@ -54,9 +54,11 @@ describe('create conversation', () => {
 
     expect(conversation.error).toEqual(false);
 
-    // get conversation
-    let getConversation = await robin.getConversation(conversation.data._id);
+    // get conversation messages
+    let getConversationMessages = await robin.getConversationMessages(
+      conversation.data._id
+    );
 
-    expect(getConversation.error).toEqual(false);
+    expect(getConversationMessages.error).toEqual(false);
   });
 });

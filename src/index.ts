@@ -64,7 +64,7 @@ export class Robin {
     }
   }
 
-  async getConversation(id: string) {
+  async getConversationMessages(id: string) {
     try {
       let response = await axios.get(
         this.baseUrl + '/conversation/messages/' + id
