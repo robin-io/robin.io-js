@@ -75,4 +75,19 @@ export class Robin {
       return undefined;
     }
   }
+
+  async searchConversation(id: string, text: string) {
+    try {
+      let response = await axios.post(
+        this.baseUrl + '/chat/search/message/' + id,
+        {
+          text: text,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 }
