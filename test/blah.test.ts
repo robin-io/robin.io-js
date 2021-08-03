@@ -73,6 +73,12 @@ describe('conversation flow', () => {
     let deleteMessages = await robin.deleteMessages('609ee76bec2d4ec11f258ea7');
 
     expect(deleteMessages.error).toEqual(false);
+  });
+});
+
+describe('group conversation flow', () => {
+  it('works', async () => {
+    let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
 
     //create group conversation
     const moderator = {
@@ -98,5 +104,13 @@ describe('conversation flow', () => {
     );
 
     expect(createGroupConversation.error).toEqual(false);
+
+    // assign group moderator
+    let assignGroupModerator = await robin.assignGroupModerator(
+      createGroupConversation.data._id,
+      'ZTPpGIpJvbbjVeGjfAiTSoFW'
+    );
+
+    expect(assignGroupModerator.error).toEqual(false);
   });
 });
