@@ -73,5 +73,30 @@ describe('conversation flow', () => {
     let deleteMessages = await robin.deleteMessages('609ee76bec2d4ec11f258ea7');
 
     expect(deleteMessages.error).toEqual(false);
+
+    //create group conversation
+    const moderator = {
+      user_token: 'aeoDIJouCbHovPkZqaDDRtiT',
+      meta_data: {
+        name: 'Raji',
+      },
+    };
+
+    const participants = [
+      {
+        user_token: 'ZTPpGIpJvbbjVeGjfAiTSoFW',
+        meta_data: {
+          name: 'Elvis',
+        },
+      },
+    ];
+
+    let createGroupConversation = await robin.createGroupConversation(
+      'Test Group',
+      moderator,
+      participants
+    );
+
+    expect(createGroupConversation.error).toEqual(false);
   });
 });

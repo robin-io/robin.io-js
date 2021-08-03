@@ -100,4 +100,25 @@ export class Robin {
       return undefined;
     }
   }
+
+  async createGroupConversation(
+    name: string,
+    moderator: UserToken,
+    participants: UserToken[]
+  ) {
+    try {
+      let response = await axios.post(
+        this.baseUrl + '/chat/conversation/group',
+        {
+          name,
+          moderator,
+          participants,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 }
