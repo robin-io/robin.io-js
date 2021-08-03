@@ -151,4 +151,19 @@ export class Robin {
       return undefined;
     }
   }
+
+  async removeGroupParticipant(id: string, userToken: string) {
+    try {
+      let response = await axios.put(
+        this.baseUrl + '/chat/conversation/group/remove_participant/' + id,
+        {
+          user_token: userToken,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 }
