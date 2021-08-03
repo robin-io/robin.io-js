@@ -112,5 +112,13 @@ describe('group conversation flow', () => {
     );
 
     expect(assignGroupModerator.error).toEqual(false);
+
+    // add group participants
+    let addGroupParticipants = await robin.addGroupParticipants(
+      createGroupConversation.data._id,
+      participants
+    );
+
+    expect(addGroupParticipants.error).toEqual(false);
   });
 });
