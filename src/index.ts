@@ -136,4 +136,19 @@ export class Robin {
       return undefined;
     }
   }
+
+  async addGroupParticipants(id: string, participants: UserToken[]) {
+    try {
+      let response = await axios.put(
+        this.baseUrl + '/chat/conversation/group/add_participants/' + id,
+        {
+          participants,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 }
