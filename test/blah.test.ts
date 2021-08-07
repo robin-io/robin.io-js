@@ -40,8 +40,8 @@ describe('create user token & get User token & sync user token', () => {
   });
 });
 
-describe('create conversation', () => {
-  it('create conversation', async () => {
+describe('conversation flow', () => {
+  it('works', async () => {
     let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
 
     // create conversation
@@ -60,5 +60,13 @@ describe('create conversation', () => {
     );
 
     expect(getConversationMessages.error).toEqual(false);
+
+    // search conversation
+    let searchConversation = await robin.searchConversation(
+      conversation.data._id,
+      'Hi'
+    );
+
+    expect(searchConversation.error).toEqual(false);
   });
 });
