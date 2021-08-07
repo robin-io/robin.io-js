@@ -121,4 +121,19 @@ export class Robin {
       return undefined;
     }
   }
+
+  async assignGroupModerator(id: string, userToken: string) {
+    try {
+      let response = await axios.put(
+        this.baseUrl + '/chat/conversation/group/assign_moderator/' + id,
+        {
+          user_token: userToken,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 }
