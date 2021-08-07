@@ -1,10 +1,15 @@
 import axios from 'axios';
-import { UserToken, Conversation } from './types';
+import { UserToken, Conversation, Message } from './types';
+const WS = require('isomorphic-ws')
 
 export class Robin {
   apiKey: string;
   tls?: boolean | false;
   baseUrl: string;
+  wsUrl: string;
+
+  retries: number = 0;
+  isConnected: boolean = false;
 
   constructor(apiKey: string, tls?: boolean) {
     this.apiKey = apiKey;
@@ -14,8 +19,10 @@ export class Robin {
 
     if (tls) {
       this.baseUrl = 'https://robbin-api.herokuapp.com/api/v1';
+      this.wsUrl = 'wss://robbin-api.herokuapp.com/ws';
     } else {
       this.baseUrl = 'http://robbin-api.herokuapp.com/api/v1';
+      this.wsUrl = 'ws://robbin-api.herokuapp.com/ws';
     }
   }
 
@@ -166,4 +173,50 @@ export class Robin {
       return undefined;
     }
   }
+
+  connect(user_token: string, max_retries?: number): WebSocket{
+    const conn = new WS(`${this.wsUrl}/${this.apiKey}/${user_token}`)
+
+    conn.onopen = function() {
+      this.isConnected = true
+    }
+
+    conn.onclose = function() {
+      max_retries = max_retries == undefined ? 5 : max_retries
+
+      while(this.retries < max_retries) {
+        this.connect(user_token, 5)
+      }
+    }
+
+    return conn
+  }
+
+  // subscribe to channel
+  subscribe(channel: string, conn: WebSocket) {
+    let msg :Message = {
+      type: 0,
+      channel:  channel,
+      content: {},
+      conversation_id: ""
+    }
+    conn.send(JSON.stringify(msg))
+    return
+  }
+
+  // send message to conversation
+
+  sendMessageToConversation(msg: object, conn: WebSocket, channel:string,conversation_id: string) {
+
+    let message :Message = {
+      type: 1,
+      channel: channel,
+      content: msg,
+      conversation_id: conversation_id
+    }
+
+    conn.send(JSON.stringify(message))
+
+  }
+
 }

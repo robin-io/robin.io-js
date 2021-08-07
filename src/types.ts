@@ -9,3 +9,10 @@ export interface Conversation {
   receiver_token: string;
   receiver_name: string;
 }
+
+export interface Message {
+  type: number;
+  content: object;
+  conversation_id: string;
+  channel: string;
+}
