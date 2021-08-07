@@ -39,3 +39,18 @@ describe('create user token & get User token & sync user token', () => {
     expect(syncUser.error).toEqual(false);
   });
 });
+
+describe('create conversation', () => {
+  it('create conversation', async () => {
+    let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
+
+    let conversation = await robin.createConversation({
+      sender_name: 'Elvis',
+      sender_token: 'ZTPpGIpJvbbjVeGjfAiTSoFW',
+      receiver_name: 'Raji',
+      receiver_token: 'aeoDIJouCbHovPkZqaDDRtiT',
+    });
+
+    expect(conversation.error).toEqual(false);
+  });
+});
