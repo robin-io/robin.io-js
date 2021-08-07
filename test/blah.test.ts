@@ -44,6 +44,7 @@ describe('create conversation', () => {
   it('create conversation', async () => {
     let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
 
+    // create conversation
     let conversation = await robin.createConversation({
       sender_name: 'Elvis',
       sender_token: 'ZTPpGIpJvbbjVeGjfAiTSoFW',
@@ -52,5 +53,12 @@ describe('create conversation', () => {
     });
 
     expect(conversation.error).toEqual(false);
+
+    // get conversation messages
+    let getConversationMessages = await robin.getConversationMessages(
+      conversation.data._id
+    );
+
+    expect(getConversationMessages.error).toEqual(false);
   });
 });

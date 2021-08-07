@@ -63,4 +63,16 @@ export class Robin {
       return undefined;
     }
   }
+
+  async getConversationMessages(id: string) {
+    try {
+      let response = await axios.get(
+        this.baseUrl + '/conversation/messages/' + id
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 }
