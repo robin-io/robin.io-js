@@ -120,5 +120,13 @@ describe('group conversation flow', () => {
     );
 
     expect(addGroupParticipants.error).toEqual(false);
+
+    // remove group participant
+    let removeGroupParticipant = await robin.removeGroupParticipant(
+      createGroupConversation.data._id,
+      'ZTPpGIpJvbbjVeGjfAiTSoFW'
+    );
+
+    expect(removeGroupParticipant.error).toEqual(false);
   });
 });
