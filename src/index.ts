@@ -90,4 +90,14 @@ export class Robin {
       return undefined;
     }
   }
+
+  async deleteMessages(id: string) {
+    try {
+      let response = await axios.delete(this.baseUrl + '/chat/message/' + id);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 }
