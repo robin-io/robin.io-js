@@ -38,6 +38,26 @@ export class Robin {
     }
   }
 
+  async createSupportStaff(data: UserToken) {
+    try {
+      let response = await axios.post(this.baseUrl + '/chat/user_token/support', data);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
+  async getSupportStaff(data: UserToken) {
+    try {
+      let response = await axios.get(this.baseUrl + '/chat/user_token/support/' + data.support_name);
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
   async getUserToken(data: UserToken) {
     try {
       let response = await axios.get(
@@ -239,7 +259,7 @@ export class Robin {
   async getUnassignedUsers(support_name: string){
     try {
       let response = await axios.get(
-        this.baseUrl + '/chat/support/unassigned' + support_name
+        this.baseUrl + '/chat/support/unassigned/' + support_name
       );
       return response.data;
     } catch (error) {

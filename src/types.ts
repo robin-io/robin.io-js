@@ -1,6 +1,8 @@
 export interface UserToken {
   user_token?: string;
   meta_data?: object;
+  support_name?: string;
+  support_id?: string;
 }
 
 export interface Conversation {
