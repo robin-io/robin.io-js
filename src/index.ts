@@ -9,7 +9,7 @@ export class Robin {
   wsUrl: string;
 
   retries!: number;
-  isConnected: boolean = false;
+  isConnected!: boolean;
 
   constructor(apiKey: string, tls?: boolean) {
     this.apiKey = apiKey;
