@@ -17,4 +17,5 @@ export interface Message {
   channel: string;
   support_name?: string;
   sender_token?: string;
+  sender_name?: string;
 }

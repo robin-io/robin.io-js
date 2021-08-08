@@ -13,9 +13,9 @@ export class Robin {
 
   constructor(apiKey: string, tls?: boolean, retries?: number) {
     this.apiKey = apiKey;
-    this.tls = tls;
-    this.retries = retries == undefined ? 0 : retries
-    this.isConnected = false
+    this.tls = tls == undefined ? false : tls;
+    this.retries = retries == undefined ? 0 : retries;
+    this.isConnected = false;
 
     axios.defaults.headers.common['x-api-key'] = this.apiKey;
 
@@ -223,16 +223,29 @@ export class Robin {
 
   // support
 
-  createSupportTicket(msg: object, conn: WebSocket, channel: string, support_name: string, sender_token: string) {
+  createSupportTicket(msg: object, conn: WebSocket, channel: string, support_name: string, sender_token: string, sender_name: string) {
     let message :Message = {
       type: 1,
       channel: channel,
       content: msg,
       support_name: support_name,
       sender_token: sender_token,
+      sender_name: sender_name
     }
 
     conn.send(JSON.stringify(message))
+  }
+
+  async getUnassignedUsers(support_name: string){
+    try {
+      let response = await axios.get(
+        this.baseUrl + '/chat/support/unassigned' + support_name
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
   }
 
 }
