@@ -13,6 +13,8 @@ export interface Conversation {
 export interface Message {
   type: number;
   content: object;
-  conversation_id: string;
+  conversation_id?: string;
   channel: string;
+  support_name?: string;
+  sender_token?: string;
 }

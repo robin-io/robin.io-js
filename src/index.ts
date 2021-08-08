@@ -219,4 +219,18 @@ export class Robin {
 
   }
 
+  // support
+
+  createSupportTicket(msg: object, conn: WebSocket, channel: string, support_name: string, sender_token: string) {
+    let message :Message = {
+      type: 1,
+      channel: channel,
+      content: msg,
+      support_name: support_name,
+      sender_token: sender_token,
+    }
+
+    conn.send(JSON.stringify(message))
+  }
+
 }
