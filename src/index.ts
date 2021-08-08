@@ -8,12 +8,14 @@ export class Robin {
   baseUrl: string;
   wsUrl: string;
 
-  retries!: number;
+  retries: number;
   isConnected!: boolean;
 
-  constructor(apiKey: string, tls?: boolean) {
+  constructor(apiKey: string, tls?: boolean, retries?: number) {
     this.apiKey = apiKey;
     this.tls = tls;
+    this.retries = retries == undefined ? 0 : retries
+    this.isConnected = false
 
     axios.defaults.headers.common['x-api-key'] = this.apiKey;
 
