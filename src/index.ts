@@ -8,7 +8,7 @@ export class Robin {
   baseUrl: string;
   wsUrl: string;
 
-  retries: number = 0;
+  retries!: number;
   isConnected: boolean = false;
 
   constructor(apiKey: string, tls?: boolean) {
