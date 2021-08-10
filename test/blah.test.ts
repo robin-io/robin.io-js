@@ -131,31 +131,34 @@ describe('group conversation flow', () => {
 
     // create channel
     let createChannel = await robin.createChannel('my youTube channel');
-    expect(createChannel.private_name).toEqual('myyouTubechannel' + '-' + robin.apiKey);
-
+    expect(createChannel.private_name).toEqual(
+      `myyouTubechannel-${robin.apiKey}`
+    );
   });
 });
 
-describe('websocket', () => {
-  it('works', async () => {
-    let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp', true);
-    console.log(robin.apiKey);
+// describe('websocket', () => {
+//   it('works', async () => {
+//     let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp', true);
+//     console.log(robin.apiKey);
 
-    // connect to websocket
-    const conn = robin.connectWebSocket('aeoDIJouCbHovPkZqaDDRtiT');
-    console.log(conn);
+//     // connect to websocket
+//     const conn = robin.connectWebSocket('aeoDIJouCbHovPkZqaDDRtiT');
+//     console.log(conn);
 
-  });
-});
+//   });
+// });
 
 // describe('web socket connection', () => {
 //   let connection: WebSocket;
 //   let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
-//   it('works', () => {
-//     const conn = robin.connect('ZTPpGIpJvbbjVeGjfAiTSoFW', 5)
-//     connection = conn
+//   it('works', async () => {
+//     const conn = await robin.connectWebSocket('aeoDIJouCbHovPkZqaDDRtiT', 0);
+//     connection = conn;
 //   })
-//   it('works for subscription', () => {
-//     robin.subscribe("chat", connection)
+//   it('works for subscription', async () => {
+//     setTimeout(function () {
+//   }, 5000);
+//     await robin.subscribeToChannel(connection, 'chat');
 //   })
 // })
