@@ -204,6 +204,7 @@ export class Robin {
     }
 
     conn.onclose = function() {
+      console.log("closed")
       max_retries = max_retries == undefined ? 5 : max_retries
 
       while(this.retries < max_retries) {
