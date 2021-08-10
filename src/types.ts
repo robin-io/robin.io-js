@@ -9,3 +9,22 @@ export interface Conversation {
   receiver_token: string;
   receiver_name: string;
 }
+
+export interface Channel {
+  name: string;
+  private_name: string;
+}
+
+export interface Message {
+  type: number;
+  channel: string;
+  content: object | null;
+  conversation_id?: string;
+}
+
+export interface Queue {
+  channel: Channel;
+  content: object;
+  group: boolean;
+  conversation_id: string;
+}

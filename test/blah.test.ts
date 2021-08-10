@@ -128,5 +128,21 @@ describe('group conversation flow', () => {
     );
 
     expect(removeGroupParticipant.error).toEqual(false);
+
+    // create channel
+    let createChannel = await robin.createChannel('');
+    expect(createChannel.private_name).toEqual('myyouTubechannel' + '-' + robin.apiKey);
+
+  });
+});
+
+describe('websocket', () => {
+  it('works', async () => {
+    let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp', true);
+    console.log(robin.apiKey);
+
+    // connect to websocket
+    await robin.connectWebSocket('aeoDIJouCbHovPkZqaDDRtiT');
+
   });
 });
