@@ -1,44 +1,44 @@
 import { Robin } from '../src';
 
-describe('initialize robin', () => {
-  it('works', () => {
-    let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
-    console.log(robin.apiKey);
-    // expect(new Robin()).toEqual(2);
-  });
-});
+// describe('initialize robin', () => {
+//   it('works', () => {
+//     let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
+//     console.log(robin.apiKey);
+//     // expect(new Robin()).toEqual(2);
+//   });
+// });
 
-describe('create user token & get User token & sync user token', () => {
-  it('works', async () => {
-    let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
-    let user_token = await robin.createUserToken({
-      meta_data: {
-        name: 'Elvis',
-      },
-    });
+// describe('create user token & get User token & sync user token', () => {
+//   it('works', async () => {
+//     let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
+//     let user_token = await robin.createUserToken({
+//       meta_data: {
+//         name: 'Elvis',
+//       },
+//     });
 
-    // console.log(user_token)
+//     // console.log(user_token)
 
-    expect(user_token.error).toEqual(false);
+//     expect(user_token.error).toEqual(false);
 
-    let get_user = await robin.getUserToken({
-      user_token: user_token.data.user_token,
-    });
+//     let get_user = await robin.getUserToken({
+//       user_token: user_token.data.user_token,
+//     });
 
-    // console.log(get_user, "here")
+//     // console.log(get_user, "here")
 
-    expect(get_user.error).toEqual(false);
+//     expect(get_user.error).toEqual(false);
 
-    let syncUser = await robin.syncUserToken({
-      user_token: user_token.data.user_token,
-      meta_data: {
-        name: 'Elvis',
-      },
-    });
+//     let syncUser = await robin.syncUserToken({
+//       user_token: user_token.data.user_token,
+//       meta_data: {
+//         name: 'Elvis',
+//       },
+//     });
 
-    expect(syncUser.error).toEqual(false);
-  });
-});
+//     expect(syncUser.error).toEqual(false);
+//   });
+// });
 
 describe('conversation flow', () => {
   it('works', async () => {
@@ -47,10 +47,12 @@ describe('conversation flow', () => {
     // create conversation
     let conversation = await robin.createConversation({
       sender_name: 'Elvis',
-      sender_token: 'ZTPpGIpJvbbjVeGjfAiTSoFW',
+      sender_token: 'XVgQSLEhOFAXnIKiuXQbtdYY',
       receiver_name: 'Raji',
       receiver_token: 'aeoDIJouCbHovPkZqaDDRtiT',
     });
+
+    console.log(conversation)
 
     expect(conversation.error).toEqual(false);
 
@@ -76,57 +78,69 @@ describe('conversation flow', () => {
   });
 });
 
-describe('group conversation flow', () => {
-  it('works', async () => {
-    let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
+// describe('group conversation flow', () => {
+//   it('works', async () => {
+//     let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
 
-    //create group conversation
-    const moderator = {
-      user_token: 'aeoDIJouCbHovPkZqaDDRtiT',
-      meta_data: {
-        name: 'Raji',
-      },
-    };
+//     //create group conversation
+//     const moderator = {
+//       user_token: 'aeoDIJouCbHovPkZqaDDRtiT',
+//       meta_data: {
+//         name: 'Raji',
+//       },
+//     };
 
-    const participants = [
-      {
-        user_token: 'ZTPpGIpJvbbjVeGjfAiTSoFW',
-        meta_data: {
-          name: 'Elvis',
-        },
-      },
-    ];
+//     const participants = [
+//       {
+//         user_token: 'ZTPpGIpJvbbjVeGjfAiTSoFW',
+//         meta_data: {
+//           name: 'Elvis',
+//         },
+//       },
+//     ];
 
-    let createGroupConversation = await robin.createGroupConversation(
-      'Test Group',
-      moderator,
-      participants
-    );
+//     let createGroupConversation = await robin.createGroupConversation(
+//       'Test Group',
+//       moderator,
+//       participants
+//     );
 
-    expect(createGroupConversation.error).toEqual(false);
+//     expect(createGroupConversation.error).toEqual(false);
 
-    // assign group moderator
-    let assignGroupModerator = await robin.assignGroupModerator(
-      createGroupConversation.data._id,
-      'ZTPpGIpJvbbjVeGjfAiTSoFW'
-    );
+//     // assign group moderator
+//     let assignGroupModerator = await robin.assignGroupModerator(
+//       createGroupConversation.data._id,
+//       'ZTPpGIpJvbbjVeGjfAiTSoFW'
+//     );
 
-    expect(assignGroupModerator.error).toEqual(false);
+//     expect(assignGroupModerator.error).toEqual(false);
 
-    // add group participants
-    let addGroupParticipants = await robin.addGroupParticipants(
-      createGroupConversation.data._id,
-      participants
-    );
+//     // add group participants
+//     let addGroupParticipants = await robin.addGroupParticipants(
+//       createGroupConversation.data._id,
+//       participants
+//     );
 
-    expect(addGroupParticipants.error).toEqual(false);
+//     expect(addGroupParticipants.error).toEqual(false);
 
-    // remove group participant
-    let removeGroupParticipant = await robin.removeGroupParticipant(
-      createGroupConversation.data._id,
-      'ZTPpGIpJvbbjVeGjfAiTSoFW'
-    );
+//     // remove group participant
+//     let removeGroupParticipant = await robin.removeGroupParticipant(
+//       createGroupConversation.data._id,
+//       'ZTPpGIpJvbbjVeGjfAiTSoFW'
+//     );
 
-    expect(removeGroupParticipant.error).toEqual(false);
-  });
-});
+//     expect(removeGroupParticipant.error).toEqual(false);
+//   });
+// });
+
+// describe('web socket connection', () => {
+//   let connection: WebSocket;
+//   let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
+//   it('works', () => {
+//     const conn = robin.connect('ZTPpGIpJvbbjVeGjfAiTSoFW', 5)
+//     connection = conn
+//   })
+//   it('works for subscription', () => {
+//     robin.subscribe("chat", connection)
+//   })
+// })
