@@ -130,7 +130,7 @@ describe('group conversation flow', () => {
     expect(removeGroupParticipant.error).toEqual(false);
 
     // create channel
-    let createChannel = await robin.createChannel('');
+    let createChannel = await robin.createChannel('my youTube channel');
     expect(createChannel.private_name).toEqual('myyouTubechannel' + '-' + robin.apiKey);
 
   });
@@ -142,7 +142,20 @@ describe('websocket', () => {
     console.log(robin.apiKey);
 
     // connect to websocket
-    await robin.connectWebSocket('aeoDIJouCbHovPkZqaDDRtiT');
+    const conn = robin.connectWebSocket('aeoDIJouCbHovPkZqaDDRtiT');
+    console.log(conn);
 
   });
 });
+
+// describe('web socket connection', () => {
+//   let connection: WebSocket;
+//   let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
+//   it('works', () => {
+//     const conn = robin.connect('ZTPpGIpJvbbjVeGjfAiTSoFW', 5)
+//     connection = conn
+//   })
+//   it('works for subscription', () => {
+//     robin.subscribe("chat", connection)
+//   })
+// })

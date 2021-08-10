@@ -1,25 +1,27 @@
 import axios from 'axios';
 import { UserToken, Conversation, Channel, Message, Queue } from './types';
+const WS = require('isomorphic-ws');
 
 export class Robin {
   apiKey: string;
   tls?: boolean | false;
   baseUrl: string;
   ws: string;
-  conn: any;
+  retries: number;
   private connected: boolean;
   private queue: Queue[];
   private subscriptions: Channel[];
   private isReconnecting: boolean;
   private _reconnectTimeout: any;
 
-  constructor(apiKey: string, tls?: boolean) {
+  constructor(apiKey: string, tls?: boolean, retries?: number) {
     this.apiKey = apiKey;
     this.tls = tls;
     this.connected = false;
     this.queue = [];
     this.subscriptions = [];
     this.isReconnecting = false;
+    this.retries = retries == undefined ? 0 : retries;
 
     axios.defaults.headers.common['x-api-key'] = this.apiKey;
 
@@ -181,11 +183,6 @@ export class Robin {
   }
 
   async createChannel(name: string) {
-    try {
-      if (name.length === 0) {
-        console.log()
-      }
-  
       const private_name = name.replace(/\s+/g, '') + '-' + this.apiKey;
       console.log(private_name);
       const channel: Channel = {
@@ -194,13 +191,9 @@ export class Robin {
       };
 
       return channel;
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
   }
 
-  async reconnect(userToken: string) {
+  reconnect(userToken: string) {
     // if connection is reconnecting, do nothing
     if (this.isReconnecting || this.connected) {
       return;
@@ -215,80 +208,66 @@ export class Robin {
     return;
   }
 
-  async connectWebSocket(userToken: string) {
-    try {
-      const ws = new WebSocket(this.ws + '/' + this.apiKey + '/' + userToken);
-      this.conn = ws;
+  connectWebSocket(userToken: string, maxRetries?: number): WebSocket {
+      const conn = new WS(this.ws + '/' + this.apiKey + '/' + userToken);
 
       // clear timeout of reconnect
       if (this._reconnectTimeout) {
         clearTimeout(this._reconnectTimeout);
       }
 
-      ws.onopen = async () => {
+      conn.onopen = () => {
         // change state of connected
         this.connected = true;
         this.isReconnecting = false;
-
-        console.log('connected to the server');
-        await this.runQueue();
-        await this.runSubscriptionQueue();
+        this.runQueue(conn);
+        this.runSubscriptionQueue(conn);
       };
 
-      ws.onerror = err => {
-        console.log('unable connect to the server', err);
+      conn.onerror = () => {
         this.connected = false;
         this.isReconnecting = false;
         this.reconnect(userToken);
       };
 
-      ws.onclose = async () => {
-        console.log('Connection is closed');
+      conn.onclose = () => {
         this.connected = false;
         this.isReconnecting = false;
-        await this.reconnect(userToken);
+
+        maxRetries = maxRetries == undefined ? 5 : maxRetries;
+        if (this.retries < maxRetries) {
+          this.reconnect(userToken);
+          this.retries++;
+        } else {
+          // do nothing
+        }
       };
 
-      return ws;
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
+      return conn;
   }
 
-  async subscribeToChannel(channel: Channel) {
-    try {
+  subscribeToChannel(conn: WebSocket, channel: Channel) {
       const message: Message = {
         type: 0,
         channel: channel.private_name,
         content: null,
       };
 
-      const msg = JSON.stringify(message);
-
-      this.conn.send(msg);
+      conn.send(JSON.stringify(message));
 
       // let store this into subscriptions for later when use reconnect and we need to run queue to subscribe again
       this.subscriptions.push(channel);
-
-      return undefined;
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
   }
 
-  async sendMessageToChannel(channel: Channel, content: object) {
-    try {
-      if (this.connected && this.conn.readyState === 1) {
+  sendMessageToChannel(conn: WebSocket, channel: Channel, content: object) {
+      if (this.connected && conn.readyState === 1) {
         const message : Message = {
           type: 1,
           channel: channel.private_name,
           content: content,
         };
 
-        const msg = JSON.stringify(message);
-        this.conn.send(msg);
+        conn.send(JSON.stringify(message));
       } else {
         // let keep it in the queue if not connected;
         this.queue.push({
@@ -298,16 +277,10 @@ export class Robin {
           group: true,
         });
       }
-      return undefined;
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
   }
 
-  async sendMessageToConversation(channel: Channel, conversationId: string, content: object) {
-    try {
-      if(this.connected && this.conn.readyState == 1) {
+  sendMessageToConversation(conn: WebSocket, channel: Channel, conversationId: string, content: object) {
+      if(this.connected && conn.readyState == 1) {
         const message : Message = {
           type: 1,
           channel: channel.private_name,
@@ -315,8 +288,7 @@ export class Robin {
           conversation_id: conversationId,
         };
 
-        const msg = JSON.stringify(message);
-        this.conn.send(msg);
+        conn.send(JSON.stringify(message));
       } else {
         // let keep it in the queue if not connected;
         this.queue.push({
@@ -326,21 +298,16 @@ export class Robin {
           group: false,
         });
       }
-      return undefined;
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
   }
 
-  async runQueue () {
+  runQueue (conn: WebSocket) {
     if (this.queue.length > 0) {
-      this.queue.forEach(async (q, index) => {
+      this.queue.forEach((q, index) => {
 
         if (q.group) {
-          await this.sendMessageToChannel(q.channel, q.content)
+          this.sendMessageToChannel(conn, q.channel, q.content);
         } else {
-          await this.sendMessageToConversation(q.channel, q.conversation_id, q.content);
+          this.sendMessageToConversation(conn, q.channel, q.conversation_id, q.content);
         }
 
         // remove queue
@@ -349,10 +316,10 @@ export class Robin {
     }
   }
 
-  async runSubscriptionQueue () {
+  runSubscriptionQueue (conn: WebSocket) {
     if (this.subscriptions.length > 0) {
-      this.subscriptions.forEach(async (subscription) => {
-        await this.subscribeToChannel(subscription);
+      this.subscriptions.forEach((subscription) => {
+        this.subscribeToChannel(conn, subscription);
       })
     }
   }
