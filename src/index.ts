@@ -20,11 +20,11 @@ export class Robin {
     axios.defaults.headers.common['x-api-key'] = this.apiKey;
 
     if (tls) {
-      this.baseUrl = 'https://robbin-api.herokuapp.com/api/v1';
-      this.wsUrl = 'wss://robbin-api.herokuapp.com/ws';
+      this.baseUrl = 'https://api.robinapp.co/api/v1';
+      this.wsUrl = 'wss://api.robinapp.co/ws';
     } else {
-      this.baseUrl = 'http://robbin-api.herokuapp.com/api/v1';
-      this.wsUrl = 'ws://robbin-api.herokuapp.com/ws';
+      this.baseUrl = 'http://api.robinapp.co/api/v1';
+      this.wsUrl = 'ws://api.robinapp.co/ws';
     }
   }
 
