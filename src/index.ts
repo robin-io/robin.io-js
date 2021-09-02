@@ -93,10 +93,11 @@ export class Robin {
     }
   }
 
-  async getConversationMessages(id: string) {
+
+  async getConversationMessages(id: string, userToken: string) {
     try {
       let response = await axios.get(
-        this.baseUrl + '/conversation/messages/' + id
+        this.baseUrl + `/conversation/messages/${id}/${userToken}`
       );
       return response.data;
     } catch (error) {
@@ -120,9 +121,13 @@ export class Robin {
     }
   }
 
-  async deleteMessages(id: string) {
+  async deleteMessages(ids: string[], requesterToken: string) {
     try {
-      let response = await axios.delete(this.baseUrl + '/chat/message/' + id);
+      let body = {
+        ids : ids,
+        requester_token: requesterToken
+      }
+      let response = await axios.delete(this.baseUrl + '/chat/message/', {data:body});
       return response.data;
     } catch (error) {
       console.log(error);
@@ -191,6 +196,20 @@ export class Robin {
       );
       return response.data;
     } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
+  async archiveConversation(id: string, userToken: string) {
+    try {
+      let response = await axios.put(
+          this.baseUrl + `/conversation/archive/${id}/${userToken}`
+      );
+
+      return response.data;
+    }
+    catch (error) {
       console.log(error);
       return undefined;
     }
