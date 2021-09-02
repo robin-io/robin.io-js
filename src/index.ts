@@ -248,12 +248,13 @@ export class Robin {
 
   // send message to conversation
 
-  sendMessageToConversation(msg: object, conn: WebSocket, channel:string,conversation_id: string) {
+  sendMessageToConversation(msg: object, conn: WebSocket, channel:string,conversation_id: string, senderToken?: string) {
 
     let message :Message = {
       type: 1,
       channel: channel,
       content: msg,
+      sender_token: senderToken,
       conversation_id: conversation_id
     }
 
