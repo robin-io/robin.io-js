@@ -214,6 +214,19 @@ export class Robin {
       return undefined;
     }
   }
+  async unarchiveConversation(id: string, userToken: string) {
+    try {
+      let response = await axios.put(
+          this.baseUrl + `/conversation/unarchive/${id}/${userToken}`
+      );
+
+      return response.data;
+    }
+    catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 
   connect(user_token: string, max_retries?: number): WebSocket{
     const conn = new WS(`${this.wsUrl}/${this.apiKey}/${user_token}`)
