@@ -40,43 +40,43 @@ import { Robin } from '../src';
 //   });
 // });
 
-describe('conversation flow', () => {
-  it('works', async () => {
-    let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
+// describe('conversation flow', () => {
+//   it('works', async () => {
+//     let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
 
-    // create conversation
-    let conversation = await robin.createConversation({
-      sender_name: 'Elvis',
-      sender_token: 'XVgQSLEhOFAXnIKiuXQbtdYY',
-      receiver_name: 'Raji',
-      receiver_token: 'aeoDIJouCbHovPkZqaDDRtiT',
-    });
+//     // create conversation
+//     let conversation = await robin.createConversation({
+//       sender_name: 'Elvis',
+//       sender_token: 'XVgQSLEhOFAXnIKiuXQbtdYY',
+//       receiver_name: 'Raji',
+//       receiver_token: 'aeoDIJouCbHovPkZqaDDRtiT',
+//     });
 
-    console.log(conversation)
+//     console.log(conversation)
 
-    expect(conversation.error).toEqual(false);
+//     expect(conversation.error).toEqual(false);
 
-    // get conversation messages
-    let getConversationMessages = await robin.getConversationMessages(
-      conversation.data._id
-    );
+//     // get conversation messages
+//     let getConversationMessages = await robin.getConversationMessages(
+//       conversation.data._id
+//     );
 
-    expect(getConversationMessages.error).toEqual(false);
+//     expect(getConversationMessages.error).toEqual(false);
 
-    // search conversation
-    let searchConversation = await robin.searchConversation(
-      conversation.data._id,
-      'Hi'
-    );
+//     // search conversation
+//     let searchConversation = await robin.searchConversation(
+//       conversation.data._id,
+//       'Hi'
+//     );
 
-    expect(searchConversation.error).toEqual(false);
+//     expect(searchConversation.error).toEqual(false);
 
-    // delete messages
-    let deleteMessages = await robin.deleteMessages('609ee76bec2d4ec11f258ea7');
+//     // delete messages
+//     let deleteMessages = await robin.deleteMessages('609ee76bec2d4ec11f258ea7');
 
-    expect(deleteMessages.error).toEqual(false);
-  });
-});
+//     expect(deleteMessages.error).toEqual(false);
+//   });
+// });
 
 // describe('group conversation flow', () => {
 //   it('works', async () => {
@@ -142,5 +142,12 @@ describe('conversation flow', () => {
 //   })
 //   it('works for subscription', () => {
 //     robin.subscribe("chat", connection)
+//   })
+// })
+
+// describe('test forward message', () => {
+//   it('works', () => {
+//     let robin = new Robin('NT-LSTTNiKdEQyAagVBdhKtoqqTEhbXGGZxaQbp');
+//     console.log(robin.forwardMessages("", [], []))
 //   })
 // })

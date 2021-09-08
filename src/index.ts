@@ -228,6 +228,28 @@ export class Robin {
     }
   }
 
+  async forwardMessages(user_token: string, message_ids: string[], conversation_ids: string[]) {
+    try {
+      if (user_token.length == 0 || message_ids.length == 0 || conversation_ids.length == 0) {
+        return
+      }
+      let response = await axios.post(
+        this.baseUrl + '/conversation/forward_messages',
+        {
+          user_token: user_token,
+          message_ids: message_ids,
+          conversation_ids: conversation_ids
+        }
+      );
+
+      return response.data
+    }
+    catch (error) {
+      console.log(error)
+      return undefined
+    }
+  }
+
   connect(user_token: string, max_retries?: number): WebSocket{
     const conn = new WS(`${this.wsUrl}/${this.apiKey}/${user_token}`)
 
