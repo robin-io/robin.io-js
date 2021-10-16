@@ -1,103 +1,184 @@
-# TSDX User Guide
+# [Robin](https://robinapp.co) Chat SDK for JavaScript
 
-Congrats! You just saved yourself hours of work by bootstrapping this project with TSDX. Let’s get you oriented with what’s here and how to use it.
+![Platform](https://img.shields.io/badge/platform-JAVASCRIPT-orange.svg)
+![Languages](https://img.shields.io/badge/language-JAVASCRIPT-orange.svg)
 
-> This TSDX setup is meant for developing libraries (not apps!) that can be published to NPM. If you’re looking to build a Node app, you could use `ts-node-dev`, plain `ts-node`, or simple `tsc`.
+## Table of contents
 
-> If you’re new to TypeScript, checkout [this handy cheatsheet](https://devhints.io/typescript)
+  1. [Introduction](#introduction)
+  1. [Before getting started](#before-getting-started)
+  1. [Getting started](#getting-started)
+  1. [Sending your first message](#sending-your-first-message)
 
-## Commands
 
-TSDX scaffolds your new library inside `/src`.
+<br />
 
-To run TSDX, use:
+
+## Introduction
+
+Through the Robin Chat SDK for Javascript, you can efficiently integrate real-time chat into your client app. On the client-side implementation, you can initialize, configure and build the chat with minimal effort. On the Chat SDK, Robin ensures reliable infra-management services for your chat within the app. This **read.me** provides the Chat SDK’s structure, supplementary features, and the installation steps.
+
+### How it works
+
+It is simple to implement chat in your client app with the Chat SDK: a user logs in, sees a list of conversations, selects or creates a conversation (direct message) or a group, and, through the use of the robin websocket event handlers, sends messages to the conversation, while also receiving them from other users within the conversation or group.
+
+<br />
+
+## Before getting started
+
+This section shows you the prerequisites you need to check for using Robin Chat SDK for JavaScript. If you have any comments or questions regarding bugs and feature requests, visit [Robinapp community](https://community.robinapp.co).
+
+### Supported browsers
+
+| Browser | Supported versions |
+| :---: | :--- |
+| Internet Explorer | 10 or higher |
+| Edge | 13 or higher |
+| Chrome | 16 or higher |
+| Firefox | 11 or higher |
+| Safari | 7 or higher |
+| Opera | 12.1 or higher |
+| iOS Safari | 7 or higher |
+| Android Browswer | 4.4 (Kitkat) or higher |
+
+## Getting started
+
+This section gives you information you need to get started with Robin Chat SDK for JavaScript.
+
+### Try the sample app
+
+The fastest way to test the Chat SDK is to build your chat app on top of our sample app. To create a project for the sample app, download the app from our GitHub repository. The link is down below.
+
+- https://github.com/robin-io/robin-vue-sdk-demo
+
+You can also download the sample using a git command:
 
 ```bash
-npm start # or yarn start
+$ git clone https://github.com/robin-io/robin-vue-sdk-demo
 ```
 
-This builds to `/dist` and runs the project in watch mode so any edits you save inside `src` causes a rebuild to `/dist`.
 
-To do a one-off build, use `npm run build` or `yarn build`.
+### Different sample projects
 
-To run tests, use `npm test` or `yarn test`.
+For JavaScript, Robin supports a variety of sample projects. Their installation procedures are detailed as below:
 
-## Configuration
+#### Run the web sample projects
 
-Code quality is set up for you with `prettier`, `husky`, and `lint-staged`. Adjust the respective fields in `package.json` accordingly.
-
-### Jest
-
-Jest tests are set up to run with `npm test` or `yarn test`.
-
-### Bundle Analysis
-
-[`size-limit`](https://github.com/ai/size-limit) is set up to calculate the real cost of your library with `npm run size` and visualize the bundle with `npm run analyze`.
-
-#### Setup Files
-
-This is the folder structure we set up for you:
-
-```txt
-/src
-  index.tsx       # EDIT THIS
-/test
-  blah.test.tsx   # EDIT THIS
-.gitignore
-package.json
-README.md         # EDIT THIS
-tsconfig.json
+1. Download and install `NodeJS` if your system doesn't have it yet.
+2. Open a terminal and move to the project path.
+```bash
+$ cd robin-vue-sdk-demo
+```
+3. Install packages that are used in the sample project.
+```bash
+$ npm install
+```
+4. Run the sample project.
+```bash
+$ npm run start
 ```
 
-### Rollup
+<br/>
 
-TSDX uses [Rollup](https://rollupjs.org) as a bundler and generates multiple rollup configs for various module formats and build settings. See [Optimizations](#optimizations) for details.
+### Here are the steps to install Chat SDK
 
-### TypeScript
+Follow the simple steps below to build the Chat SDK into your client app.
 
-`tsconfig.json` is set up to interpret `dom` and `esnext` types, as well as `react` for `jsx`. Adjust according to your needs.
+#### Step 1: Create a Robinapp account
 
-## Continuous Integration
+A Robinapp account comprises everything required in a chat service including users, message, and api-keys. To create an application:
 
-### GitHub Actions
+1. Go to the [Robinapp Dashboard](https://dashboard.robinapp.co/signup) and enter your email and password, and create a new account.
+3. Navigate to [Api Config](https://dashboard.robinapp.co/apiconfig) and copy your `API key`
 
-Two actions are added by default:
 
-- `main` which installs deps w/ cache, lints, tests, and builds on all pushes against a Node and OS matrix
-- `size` which comments cost comparison of your library on every pull request using [`size-limit`](https://github.com/ai/size-limit)
+> Note: All the data is limited to the scope of a single user account, thus the users in different Robinapp accounts are unable to chat with each other.
 
-## Optimizations
+#### Step 2: Install the Chat SDK
 
-Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
+If you’re familiar with using external libraries or SDKs, installing the Chat SDK is simple.You can install the Chat SDK with package manager `npm` or `yarn` by entering the command below on the command line.
 
-```js
-// ./types/index.d.ts
-declare var __DEV__: boolean;
+- **Npm**
 
-// inside your code...
-if (__DEV__) {
-  console.log('foo');
-}
+> Note: To use npm to install the Chat SDK, Node.js must be first installed on your system.
+
+```bash
+$ npm install robin.io-js --save (request to npm server)
 ```
 
-You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+Install via `Npm` and import like below in your `TypeScript` file.
 
-## Module Formats
+```bash
+import { Robin } from 'robin.io-js';
+var robin = new Robin("<api-key>", true);
+// do something...
+```
 
-CJS, ESModules, and UMD module formats are supported.
+If you have trouble importing Robin, please check your `tsconfig.json` file and change the value of `allowSyntheticDefaultImports` to true in `compilerOptions`.
 
-The appropriate paths are configured in `package.json` and `dist/index.js` accordingly. Please report if any issues are found.
+- **Yarn**
 
-## Named Exports
+```bash
+$ yarn add robinapp.io-js
+```
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+<br />
 
-## Including Styles
+## Sending your first message
 
-There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
+Follow the step-by-step instructions below to authenticate and send your first message.
 
-For vanilla CSS, you can include it at the root directory and add it to the `files` section in your `package.json`, so that it can be imported separately by your users and run through their bundler's loader.
+### Authentication
 
-## Publishing to NPM
+To use the features of the Chat SDK in your client app, a `robin` instance must be initiated in each client app before user authentication with Robin server. These instances communicate and interact with the server based on an authenticated user account, allowing for the client app to use the Chat SDK features.
 
-We recommend using [np](https://github.com/sindresorhus/np).
+### Step 1: Initialize the Chat SDK
+
+You need to initialize a `robin` instance before authentication. Initialization binds the Chat SDK to Javascript’s context which allows the Chat SDK to respond to connection and state changes and also enables client apps to use the Chat SDK features.
+
+To initialize a `Robin` instance, pass the `API key` of your Robin account in the dashboard as the first argument to a parameter in the `new Robin()` method and `true` or `false` for the nex parameter as it tells the sdk whether to load with ssl or not. As the `new Robin()` can only be a single instance, call it only a single time across your Javascript client app. Typically, initialization is implemented in the user login screen.
+
+> **Note**: It is recommended to initialize the Chat SDK at the top of your Javascript file.
+
+```javascript
+var robin = new Robin("<api_key>", true);
+```
+
+### Step 2: Connect to Robin server
+
+
+Connect a user to Robin server either through a unique user ID called a `user_token `, as it ensures privacy with the user.
+
+#### A. User Token
+
+Create user token
+```javascript
+let resp = await robin.createUserToken({
+  meta_data:{
+    username:"elvis"
+    }
+  })
+
+```
+
+Connect a user to Robin server using their unique **user_token**.
+```javascript
+robin.connect(USER_TOKEN);
+```
+
+### Step 3: Channels
+
+All messages sent via Robin are sent through channels, you can consider channels as tunnels that relay messages to all connected clients.
+
+
+### Step 5: Send a message to the channel
+
+Finally, send a message to the channel.
+
+```javascript
+robin.sendMessageToConversation(msg: object, conn: WebSocket, channel:string,conversation_id: string, senderToken?: string);
+// senderToken = user_token
+// msg should be s json encodable object
+```
+
+<br />
