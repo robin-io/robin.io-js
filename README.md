@@ -1,128 +1,93 @@
-# [Robin](https://robinapp.co) Chat SDK for JavaScript
+<h1 align="start">
+  Robin.io-js
+</h1>
 
-![Platform](https://img.shields.io/badge/platform-JAVASCRIPT-orange.svg)
-![Languages](https://img.shields.io/badge/language-JAVASCRIPT-orange.svg)
+<p align="start">
+<a href="https://npmjs.com/package/robin.io-js">
+    <img alt="" src="https://img.shields.io/npm/v/robin.io-js.svg">
+</a>
+  <a href="https://npmjs.com/package/robin.io-js
+">
+      <img alt="" src="https://img.shields.io/npm/dt/robin.io-js
+.svg">
+  </a>
+  <a href="https://npmjs.com/package/robin.io-js
+">
+      <img alt="" src="https://img.shields.io/npm/l/robin.io-js
+.svg">
+  </a>
+</p>
 
 ## Table of contents
 
-  1. [Introduction](#introduction)
-  1. [Before getting started](#before-getting-started)
-  1. [Getting started](#getting-started)
-  1. [Sending your first message](#sending-your-first-message)
-
+<details open="open">
+  <summary>Table of Contents</summary>
+  <ol>
+    <li>
+      <a href="#introduction">Introduction</a>
+    </li>
+    <li>
+      <a href="#prerequisites">Prerequisites</a>
+    </li>
+    <li><a href="#getting-started">Getting Started</a></li>
+    <li><a href="#sending-your-first-message">Sending your first message</a></li>
+    <li><a href="#license">License</a></li>
+  </ol>
+</details>
 
 <br />
 
+[View Documentation Here](https://robin-io-js-doc-csgdc.ondigitalocean.app/classes/Robin.html)
 
 ## Introduction
 
-Through the Robin Chat SDK for Javascript, you can efficiently integrate real-time chat into your client app. On the client-side implementation, you can initialize, configure and build the chat with minimal effort. On the Chat SDK, Robin ensures reliable infra-management services for your chat within the app. This **read.me** provides the Chat SDK’s structure, supplementary features, and the installation steps.
+Robin.io-js is a Javascript SDK built to communicate with the [Robinapp API](https://robinapp.co/). Now you can integrate [Robin.io](https://robinapp.co/) with minimal effort and quickly setup a real-time messaging platform in your Web application.
 
-### How it works
+### Interactive Demo
 
-It is simple to implement chat in your client app with the Chat SDK: a user logs in, sees a list of conversations, selects or creates a conversation (direct message) or a group, and, through the use of the robin websocket event handlers, sends messages to the conversation, while also receiving them from other users within the conversation or group.
+Checkout the <a target="_blank" href="https://robin-demo.herokuapp.com/"> Interactive Demo </a> here.
+<br>
+You can also checkout the sample repository <a target="_blank" href="https://github.com/robin-io/robin-vue-sdk-demo">here</a>.
 
-<br />
+## Prerequisites
 
-## Before getting started
+This library supports the following browsers:
 
-This section shows you the prerequisites you need to check for using Robin Chat SDK for JavaScript. If you have any comments or questions regarding bugs and feature requests, visit [Robinapp community](https://community.robinapp.co).
-
-### Supported browsers
-
-| Browser | Supported versions |
-| :---: | :--- |
-| Internet Explorer | 10 or higher |
-| Edge | 13 or higher |
-| Chrome | 16 or higher |
-| Firefox | 11 or higher |
-| Safari | 7 or higher |
-| Opera | 12.1 or higher |
-| iOS Safari | 7 or higher |
-| Android Browswer | 4.4 (Kitkat) or higher |
+|      Browser      | Supported versions     |
+| :---------------: | :--------------------- |
+| Internet Explorer | 10 or higher           |
+|       Edge        | 13 or higher           |
+|      Chrome       | 16 or higher           |
+|      Firefox      | 11 or higher           |
+|      Safari       | 7 or higher            |
+|       Opera       | 12.1 or higher         |
+|    iOS Safari     | 7 or higher            |
+| Android Browswer  | 4.4 (Kitkat) or higher |
 
 ## Getting started
-
-This section gives you information you need to get started with Robin Chat SDK for JavaScript.
-
-### Try the sample app
-
-The fastest way to test the Chat SDK is to build your chat app on top of our sample app. To create a project for the sample app, download the app from our GitHub repository. The link is down below.
-
-- https://github.com/robin-io/robin-vue-sdk-demo
-
-You can also download the sample using a git command:
-
-```bash
-$ git clone https://github.com/robin-io/robin-vue-sdk-demo
-```
-
-
-### Different sample projects
-
-For JavaScript, Robin supports a variety of sample projects. Their installation procedures are detailed as below:
-
-#### Run the web sample projects
-
-1. Download and install `NodeJS` if your system doesn't have it yet.
-2. Open a terminal and move to the project path.
-```bash
-$ cd robin-vue-sdk-demo
-```
-3. Install packages that are used in the sample project.
-```bash
-$ npm install
-```
-4. Run the sample project.
-```bash
-$ npm run start
-```
-
-<br/>
-
-### Here are the steps to install Chat SDK
-
-Follow the simple steps below to build the Chat SDK into your client app.
 
 #### Step 1: Create a Robinapp account
 
 A Robinapp account comprises everything required in a chat service including users, message, and api-keys. To create an application:
 
 1. Go to the [Robinapp Dashboard](https://dashboard.robinapp.co/signup) and enter your email and password, and create a new account.
-3. Navigate to [Api Config](https://dashboard.robinapp.co/apiconfig) and copy your `API key`
-
+2. Navigate to [Api Config](https://dashboard.robinapp.co/apiconfig) and copy your `API key`
 
 > Note: All the data is limited to the scope of a single user account, thus the users in different Robinapp accounts are unable to chat with each other.
 
 #### Step 2: Install the Chat SDK
 
-If you’re familiar with using external libraries or SDKs, installing the Chat SDK is simple.You can install the Chat SDK with package manager `npm` or `yarn` by entering the command below on the command line.
-
-- **Npm**
-
-> Note: To use npm to install the Chat SDK, Node.js must be first installed on your system.
-
-```bash
-$ npm install robin.io-js --save (request to npm server)
 ```
+  ## NPM
 
-Install via `Npm` and import like below in your `TypeScript` file.
+  npm install robin.io-js --save
 
-```bash
-import { Robin } from 'robin.io-js';
-var robin = new Robin("<api-key>", true);
-// do something...
+  OR
+
+  ## YARN
+
+  yarn add robinapp.io-js
 ```
-
-If you have trouble importing Robin, please check your `tsconfig.json` file and change the value of `allowSyntheticDefaultImports` to true in `compilerOptions`.
-
-- **Yarn**
-
-```bash
-$ yarn add robinapp.io-js
-```
-
-<br />
 
 ## Sending your first message
 
@@ -134,34 +99,36 @@ To use the features of the Chat SDK in your client app, a `robin` instance must 
 
 ### Step 1: Initialize the Chat SDK
 
-You need to initialize a `robin` instance before authentication. Initialization binds the Chat SDK to Javascript’s context which allows the Chat SDK to respond to connection and state changes and also enables client apps to use the Chat SDK features.
+You need to initialize a `robin` instance before authentication. Initialization binds the Chat SDK to Javascript’s context which allows the Chat SDK to respond to connection, state changes and also enables client apps to use the Chat SDK features.
 
-To initialize a `Robin` instance, pass the `API key` of your Robin account in the dashboard as the first argument to a parameter in the `new Robin()` method and `true` or `false` for the nex parameter as it tells the sdk whether to load with ssl or not. As the `new Robin()` can only be a single instance, call it only a single time across your Javascript client app. Typically, initialization is implemented in the user login screen.
+To initialize a `Robin` instance, pass the `API key` as the first argument to in the `new Robin()` method, You can find your API key in the API Configuration tab in your [Robin Account](https://robin-user.herokuapp.com/apiconfig).
+
+Then `true` or `false` for as the second parameter as it tells the sdk whether to load with ssl or not. As the `new Robin()` can only be a single instance, call it only a single time across your Javascript client app. Typically, initialization is implemented in the user login screen.
 
 > **Note**: It is recommended to initialize the Chat SDK at the top of your Javascript file.
 
 ```javascript
-var robin = new Robin("<api_key>", true);
+const robin = new Robin('<api_key>', true);
 ```
 
 ### Step 2: Connect to Robin server
 
+You'll need a **USER_TOKEN** to connect to the Robin server.
 
-Connect a user to Robin server either through a unique user ID called a `user_token `, as it ensures privacy with the user.
-
-#### A. User Token
+#### A. Create User Token
 
 Create user token
-```javascript
-let resp = await robin.createUserToken({
-  meta_data:{
-    username:"elvis"
-    }
-  })
 
+```javascript
+const response = await robin.createUserToken({
+  meta_data: {
+    username: 'elvis',
+  },
+});
 ```
 
-Connect a user to Robin server using their unique **user_token**.
+Connect to the Robin server using the **USER_TOKEN** you just created.
+
 ```javascript
 robin.connect(USER_TOKEN);
 ```
@@ -170,15 +137,44 @@ robin.connect(USER_TOKEN);
 
 All messages sent via Robin are sent through channels, you can consider channels as tunnels that relay messages to all connected clients.
 
+### Step 4: Create a conversation
 
-### Step 5: Send a message to the channel
+Before we can send a message to a channel we first need to create a converstion.
 
-Finally, send a message to the channel.
+```
+const response = await robin.createConversation({
+  sender_name: string,
+  sender_token: string,
+  receiver_token: string,
+  receiver_name: string
+})
+```
+
+### Step 5: Send a message to a conversation
+
+Finally, send a message to a conversation.
 
 ```javascript
 robin.sendMessageToConversation(msg: object, conn: WebSocket, channel:string,conversation_id: string, senderToken?: string);
-// senderToken = user_token
-// msg should be s json encodable object
 ```
 
-<br />
+#### Options
+
+The following are general attributes used in Robin:
+
+|   Attribute    |   Type    | Default | Description                                              |
+| :------------: | :-------: | :-----: | :------------------------------------------------------- |
+|      Conn      | WebSocket |  null   | Websocket opbject returned after calling robin.connect() |
+|  sender_name   |  String   |   ''    | Name of the person sending the message                   |
+|  sender_token  |  String   |   ''    | USER_TOKEN of the person sending the message             |
+| receiver_name  |  String   |   ''    | Name of the person receiving the message                 |
+| receiver_token |  String   |   ''    | USER_TOKEN of the person receiving the message           |
+|      msg       |  Object   |   {}    | Json serializable object containing the message          |
+
+If you have any comments or questions regarding bugs and feature requests, visit [Robinapp community](https://community.robinapp.co).
+
+[View Documentation Here](https://robin-io-js-doc-csgdc.ondigitalocean.app/classes/Robin.html).
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.

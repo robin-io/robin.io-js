@@ -19,7 +19,6 @@
     "size": "size-limit",
     "analyze": "size-limit --why"
   },
-  "peerDependencies": {},
   "husky": {
     "hooks": {
       "pre-commit": "tsdx lint"
@@ -55,6 +54,7 @@
   "dependencies": {
     "axios": "^0.21.1",
     "isomorphic-ws": "^4.0.1",
+    "typedoc": "^0.22.6",
     "ws": "^7.5.3"
   }
 }
