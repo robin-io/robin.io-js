@@ -22,6 +22,8 @@ export interface Message {
   support_name?: string;
   sender_token?: string;
   sender_name?: string;
+  reply_to?: string;
+  is_reply?: boolean;
 }
 const WS = require('isomorphic-ws')
 
@@ -318,6 +320,36 @@ export class Robin {
 
     conn.send(JSON.stringify(message))
 
+  }
+
+  replyToMessage(msg: Object, conn: WebSocket, channel: string, conversation_id: string, replyTo: string, senderToken?: string) {
+
+    let message :Message = {
+      type: 1,
+      channel: channel,
+      content: msg,
+      sender_token: senderToken,
+      conversation_id: conversation_id,
+      reply_to: replyTo,
+      is_reply: true
+    }
+
+    conn.send(JSON.stringify(message))
+  }
+
+  async reactToMessage(reaction: string, conversation_id: string, message_id: string, sender_token: string) {
+    try {
+      let response = await axios.post(this.baseUrl + `/chat/message/reaction/${message_id}`, {
+        user_token: sender_token,
+        reaction: reaction,
+        conversation_id: conversation_id,
+        timestamp: (new Date())
+      })
+      return response.data
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
   }
 
   async sendMessageAttachment(user_token: string, conversation_id: string, file: File){
