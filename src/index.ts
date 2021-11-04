@@ -371,6 +371,26 @@ export class Robin {
     }
   }
 
+  async replyMessageWithAttachment(user_token: string, conversation_id: string, message_id: string, file: File){
+    let fd = new FormData()
+
+    fd.append("sender_token", user_token)
+    fd.append("conversation_id", conversation_id)
+    fd.append("message_id", message_id)
+    fd.append("file", file)
+
+    try {
+      let response = await axios.post(
+        this.baseUrl + '/chat/message/send/attachment/reply/',
+        fd
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
   // support
 
   createSupportTicket(msg: object, conn: WebSocket, channel: string, support_name: string, sender_token: string, sender_name: string) {
