@@ -352,6 +352,16 @@ export class Robin {
     }
   }
 
+  async RemoveReaction(reaction_id: string, message_id: string) {
+    try {
+      let response = await axios.delete(this.baseUrl + `/chat/message/reaction/delete/${reaction_id}/${message_id}`, {})
+      return response.data
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
   async sendMessageAttachment(user_token: string, conversation_id: string, file: File){
     let fd = new FormData()
 
