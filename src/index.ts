@@ -441,4 +441,26 @@ export class Robin {
     }
   }
 
+  async starMessage(message_id: string, user_token: string) {
+    try {
+      let response = await axios.post(this.baseUrl + '/chat/message/'+message_id, {
+        user_token: user_token
+      })
+      return response.data;
+    } catch (error) {
+      console.log(error)
+      return undefined
+    }
+  }
+
+  async getStarredMessages(user_token: string) {
+    try {
+      let response = await axios.get(this.baseUrl + '/chat/message/'+user_token)
+      return response.data;
+    } catch (error) {
+      console.log(error)
+      return undefined
+    }
+  }
+
 }
