@@ -463,4 +463,14 @@ export class Robin {
     }
   }
 
+  async deleteConversation(user_token: string, conversation_id: string) {
+    try {
+      let response = await axios.delete(this.baseUrl + `/conversation/delete/${conversation_id}/${user_token}`)
+      return response.data;
+    } catch (error) {
+      console.log(error)
+      return undefined
+    }
+  }
+
 }
