@@ -473,4 +473,14 @@ export class Robin {
     }
   }
 
+  async getConversationDetails(conversation_id: string) {
+    try {
+      let response = await axios.get(this.baseUrl + `/conversation/details/${conversation_id}`)
+      return response.data;
+    } catch (error) {
+      console.log(error)
+      return undefined
+    }
+  }
+
 }
