@@ -381,23 +381,6 @@ export class Robin {
     }
   }
 
-  async uploadGroupIcon(conversation_id: string, file: File) {
-    let fd = new FormData()
-
-    fd.append("file", file)
-
-    try {
-      let response = await axios.post(
-        this.baseUrl + '/conversation/group/upload/media/'+conversation_id,
-        fd
-      );
-      return response.data
-    } catch (error) {
-      console.log(error);
-      return undefined;
-    }
-  }
-
   async replyMessageWithAttachment(user_token: string, conversation_id: string, message_id: string, file: File){
     let fd = new FormData()
 
@@ -497,6 +480,23 @@ export class Robin {
     } catch (error) {
       console.log(error)
       return undefined
+    }
+  }
+
+  async uploadGroupIcon(conversation_id: string, file: File) {
+    let fd = new FormData()
+
+    fd.append("file", file)
+
+    try {
+      let response = await axios.post(
+        this.baseUrl + '/conversation/group/upload/media/'+conversation_id,
+        fd
+      );
+      return response.data
+    } catch (error) {
+      console.log(error);
+      return undefined;
     }
   }
 
