@@ -159,3 +159,11 @@ describe('test read receipts', () => {
         robin.sendReadReceipts([''], '')
     });
 });
+
+// describe('test groupIconUpload', () => {
+//   it('works',  async () => {
+//     let robin = new Robin("NT-qBsdCDfPFYQkAKcfxMeNgSXvYTmqakOBVYRr")
+//     var res = await robin.uploadGroupIcon("61ba10ae72dd084adf81c2d0", new File([], 'elf.txt'))
+//     console.log(res)
+//   })
+// })
