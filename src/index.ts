@@ -253,7 +253,7 @@ export class Robin {
     }
   }
 
-  async forwardMessages(user_token: string, message_ids: string[], conversation_ids: string[]) {
+  async forwardMessages(user_token: string, message_ids: string[], conversation_ids: string[], senderName?: string) {
     try {
       if (user_token.length == 0 || message_ids.length == 0 || conversation_ids.length == 0) {
         return
@@ -263,7 +263,8 @@ export class Robin {
         {
           user_token: user_token,
           message_ids: message_ids,
-          conversation_ids: conversation_ids
+          conversation_ids: conversation_ids,
+          sender_name: senderName
         }
       );
 
@@ -308,21 +309,22 @@ export class Robin {
 
   // send message to conversation
 
-  sendMessageToConversation(msg: object, conn: WebSocket, channel:string,conversation_id: string, senderToken?: string) {
+  sendMessageToConversation(msg: object, conn: WebSocket, channel:string,conversation_id: string, senderToken?: string, senderName?: string) {
 
     let message :Message = {
       type: 1,
       channel: channel,
       content: msg,
       sender_token: senderToken,
-      conversation_id: conversation_id
+      conversation_id: conversation_id,
+      sender_name: senderName
     }
 
     conn.send(JSON.stringify(message))
 
   }
 
-  replyToMessage(msg: Object, conn: WebSocket, channel: string, conversation_id: string, replyTo: string, senderToken?: string) {
+  replyToMessage(msg: Object, conn: WebSocket, channel: string, conversation_id: string, replyTo: string, senderToken?: string, senderName?: string) {
 
     let message :Message = {
       type: 1,
@@ -331,7 +333,8 @@ export class Robin {
       sender_token: senderToken,
       conversation_id: conversation_id,
       reply_to: replyTo,
-      is_reply: true
+      is_reply: true,
+      sender_name: senderName
     }
 
     conn.send(JSON.stringify(message))
@@ -362,10 +365,11 @@ export class Robin {
     }
   }
 
-  async sendMessageAttachment(user_token: string, conversation_id: string, file: File){
+  async sendMessageAttachment(user_token: string, conversation_id: string, file: File, senderName?: string){
     let fd = new FormData()
 
     fd.append("sender_token", user_token)
+    fd.append("sender_name", senderName!)
     fd.append("conversation_id", conversation_id)
     fd.append("file", file)
 
@@ -381,10 +385,11 @@ export class Robin {
     }
   }
 
-  async replyMessageWithAttachment(user_token: string, conversation_id: string, message_id: string, file: File){
+  async replyMessageWithAttachment(user_token: string, conversation_id: string, message_id: string, file: File, senderName?: string){
     let fd = new FormData()
 
     fd.append("sender_token", user_token)
+    fd.append("sender_name", senderName!)
     fd.append("conversation_id", conversation_id)
     fd.append("message_id", message_id)
     fd.append("file", file)
