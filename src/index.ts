@@ -365,12 +365,13 @@ export class Robin {
     }
   }
 
-  async sendMessageAttachment(user_token: string, conversation_id: string, file: File, senderName?: string){
+  async sendMessageAttachment(user_token: string, conversation_id: string, file: File, senderName?: string, msg?: string){
     let fd = new FormData()
 
     fd.append("sender_token", user_token)
     fd.append("sender_name", senderName!)
     fd.append("conversation_id", conversation_id)
+    fd.append("msg", msg!)
     fd.append("file", file)
 
     try {
@@ -385,13 +386,14 @@ export class Robin {
     }
   }
 
-  async replyMessageWithAttachment(user_token: string, conversation_id: string, message_id: string, file: File, senderName?: string){
+  async replyMessageWithAttachment(user_token: string, conversation_id: string, message_id: string, file: File, senderName?: string, msg?: string){
     let fd = new FormData()
 
     fd.append("sender_token", user_token)
     fd.append("sender_name", senderName!)
     fd.append("conversation_id", conversation_id)
     fd.append("message_id", message_id)
+    fd.append("msg", msg!)
     fd.append("file", file)
 
     try {
