@@ -130,6 +130,22 @@ export class Robin {
       return undefined;
     }
   }
+  async getConversationMessagesByTimestamp(id: string, userToken: string, start: Date, end: Date) {
+    try {
+      let response = await axios.post(
+        this.baseUrl + `/chat/conversation/message/timestamp/${id}`,
+        {
+          user_token:userToken,
+          start:start,
+          end:end
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
 
   async searchConversation(id: string, text: string) {
     try {
