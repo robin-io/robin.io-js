@@ -496,9 +496,9 @@ export class Robin {
     }
   }
 
-  async getConversationDetails(conversation_id: string) {
+  async getConversationDetails(conversation_id: string, user_token: string) {
     try {
-      let response = await axios.get(this.baseUrl + `/conversation/details/${conversation_id}`)
+      let response = await axios.get(this.baseUrl + `/conversation/details/${conversation_id}/${user_token}`)
       return response.data;
     } catch (error) {
       console.log(error)
