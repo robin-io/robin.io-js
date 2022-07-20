@@ -36,9 +36,10 @@ export class Robin {
   retries: number;
   isConnected!: boolean;
 
+  // tls? : deprecated will always connect via https
   constructor(apiKey: string, tls?: boolean, retries?: number) {
     this.apiKey = apiKey;
-    this.tls = tls == undefined ? false : tls;
+    this.tls = tls == undefined ? true : tls;
     this.retries = retries == undefined ? 0 : retries;
     this.isConnected = false;
 
