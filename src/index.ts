@@ -524,4 +524,18 @@ export class Robin {
     }
   }
 
+  async uploadDisplayPhoto(user_token: string, photo: string) {
+    let fd = new FormData()
+
+    fd.append("display_photo", photo)
+
+    try {
+      let response = await axios.put(this.baseUrl + '/chat/user_token/display_photo/'+user_token, fd)
+      return response.data
+    } catch (error) {
+      console.log(error);
+      return undefined;
+    }
+  }
+
 }
