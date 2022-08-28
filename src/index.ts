@@ -452,11 +452,12 @@ export class Robin {
     }
   }
 
-  async sendReadReceipts(message_ids: string[], conversation_id: string) {
+  async sendReadReceipts(message_ids: string[], conversation_id: string, user_token: string) {
     try {
       let response = await axios.post(this.baseUrl + '/chat/message/read/receipt', {
         message_ids: message_ids,
-        conversation_id: conversation_id
+        conversation_id: conversation_id,
+        user_token: user_token,
       })
       return response.data;
     } catch (error) {

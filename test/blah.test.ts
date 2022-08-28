@@ -156,7 +156,7 @@ describe('test forward message', () => {
 describe('test read receipts', () => {
     it('works', () => {
         let robin = new Robin('NT-LSTTN.......hKtoqqTEhbXGGZxaQbp');
-        robin.sendReadReceipts([''], '')
+        robin.sendReadReceipts([''], '', '')
     });
 });
 
