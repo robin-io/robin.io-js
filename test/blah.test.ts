@@ -2,82 +2,113 @@ import { Robin } from '../src';
 
 describe('initialize robin', () => {
   it('works', () => {
-    let robin = new Robin('NT-LSTTN.......hKtoqqTEhbXGGZxaQbp');
-    console.log(robin.apiKey);
-    // expect(new Robin()).toEqual(2);
+    let robin = new Robin('NT-UAzQwycFjXwvGfeciRyVumTWjfUFCImrRFQH', false, 3, "dev");
+
+    expect(robin.baseUrl).toEqual("http://67.207.75.186/api/v1")
+    expect(robin.wsUrl).toEqual("ws://67.207.75.186/ws")
   });
 });
 
-describe('create user token & get User token & sync user token', () => {
+describe('create user token', () => {
   it('works', async () => {
-    let robin = new Robin('NT-LSTTN.......hKtoqqTEhbXGGZxaQbp');
+    let robin = new Robin('NT-UAzQwycFjXwvGfeciRyVumTWjfUFCImrRFQH', false, 3, "dev");
     let user_token = await robin.createUserToken({
       meta_data: {
         name: 'Elvis',
       },
     });
+  });
+});
 
-    // console.log(user_token)
-
-    expect(user_token.error).toEqual(false);
+describe('get user token', () => {
+  it('works', async() => {
+    let robin = new Robin('NT-UAzQwycFjXwvGfeciRyVumTWjfUFCImrRFQH', false, 3, "dev");
 
     let get_user = await robin.getUserToken({
-      user_token: user_token.data.user_token,
-    });
+      user_token: "dhkogzyIxbAQwFnKDNTfAKOU",
+    }, 20, 1);
 
-    // console.log(get_user, "here")
+    console.log(get_user.paginated_conversations)
+    expect(get_user).toBeDefined()
+  })
+})
 
-    expect(get_user.error).toEqual(false);
+describe('sync user token', () => {
+  it('works', async() => {
+    let robin = new Robin('NT-UAzQwycFjXwvGfeciRyVumTWjfUFCImrRFQH', false, 3, "dev");
 
     let syncUser = await robin.syncUserToken({
-      user_token: user_token.data.user_token,
+      user_token: "dhkogzyIxbAQwFnKDNTfAKOU",
       meta_data: {
         name: 'Elvis',
       },
     });
 
-    expect(syncUser.error).toEqual(false);
-  });
-});
+    expect(syncUser).toBeDefined()
+  })
+})
 
 describe('conversation flow', () => {
   it('works', async () => {
-    let robin = new Robin('NT-LSTTN.......hKtoqqTEhbXGGZxaQbp');
+    let robin = new Robin('NT-UAzQwycFjXwvGfeciRyVumTWjfUFCImrRFQH', false, 3, "dev");
 
     // create conversation
     let conversation = await robin.createConversation({
       sender_name: 'Elvis',
-      sender_token: 'XVgQSLEhOFAXnIKiuXQbtdYY',
+      sender_token: 'dhkogzyIxbAQwFnKDNTfAKOU',
       receiver_name: 'Raji',
-      receiver_token: 'aeoDIJouCbHovPkZqaDDRtiT',
+      receiver_token: 'lRHBiKVLvSkyxUvLqqYhGhIV',
     });
 
     console.log(conversation)
+    // 634f1b95bdca092511a84f0d
 
-    expect(conversation.error).toEqual(false);
-
-    // get conversation messages
-    let getConversationMessages = await robin.getConversationMessages(
-      conversation.data._id,
-      'user-token'
-    );
-
-    expect(getConversationMessages.error).toEqual(false);
-
-    // search conversation
-    let searchConversation = await robin.searchConversation(
-      conversation.data._id,
-      'Hi'
-    );
-
-    expect(searchConversation.error).toEqual(false);
-
-    // delete messages
-    let deleteMessages = await robin.deleteMessages(['609ee76bec2d4ec11f258ea7'], 'requester-token');
-
-    expect(deleteMessages.error).toEqual(false);
+    expect(conversation).toBeDefined()
   });
 });
+
+describe('get conversation messages', () => {
+  it('works', async() => {
+    let robin = new Robin('NT-UAzQwycFjXwvGfeciRyVumTWjfUFCImrRFQH', false, 3, "dev");
+    // get conversation messages
+    let getConversationMessages = await robin.getConversationMessages(
+      "634f1b95bdca092511a84f0d",
+      'user-token',
+      100,
+      1
+    );
+
+    console.log(getConversationMessages)
+
+    expect(getConversationMessages).toBeDefined()
+  })
+})
+
+describe('search conversation', () => {
+  it('works', async() => {
+    let robin = new Robin('NT-UAzQwycFjXwvGfeciRyVumTWjfUFCImrRFQH', false, 3, "dev");
+    let searchConversation = await robin.searchConversation(
+      '634f1b95bdca092511a84f0d',
+      'hola',
+      100,
+      1
+    );
+
+    console.log(searchConversation)
+
+    expect(searchConversation).toBeDefined()
+    
+  })
+})
+
+describe('delete message', () => {
+  it('works', async() => {
+    let robin = new Robin('NT-UAzQwycFjXwvGfeciRyVumTWjfUFCImrRFQH', false, 3, "dev");
+    let deleteMessages = await robin.deleteMessages(['63569907bf0184c1b6c69c91'], 'requester-token');
+    console.log(deleteMessages)
+    expect(deleteMessages).toBeDefined()
+  })
+})
 
 describe('group conversation flow', () => {
   it('works', async () => {
@@ -160,10 +191,10 @@ describe('test read receipts', () => {
     });
 });
 
-// describe('test groupIconUpload', () => {
-//   it('works',  async () => {
-//     let robin = new Robin("NT-qBsdCDfPFYQkAKcfxMeNgSXvYTmqakOBVYRr")
-//     var res = await robin.uploadGroupIcon("61ba10ae72dd084adf81c2d0", new File([], 'elf.txt'))
-//     console.log(res)
-//   })
-// })
+describe('test groupIconUpload', () => {
+  it('works',  async () => {
+    let robin = new Robin("NT-qBsdCDfPFYQkAKcfxMeNgSXvYTmqakOBVYRr")
+    var res = await robin.uploadGroupIcon("61ba10ae72dd084adf81c2d0", new File([], 'elf.txt'))
+    console.log(res)
+  })
+})
