@@ -76,10 +76,8 @@ export class Robin {
   async createUserToken(data: UserToken) {
     try {
       let response = await axios.post(this.baseUrl + '/chat/user_token', data);
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -112,10 +110,7 @@ export class Robin {
         this.baseUrl + `/chat/user_token/${data.user_token}?limit=${limit}&page=${page}`
       );
 
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -128,9 +123,6 @@ export class Robin {
         this.baseUrl + '/chat/user_token/' + data.user_token,
         data
       );
-      if (response.data.error) {
-        return undefined;
-      }
       return response.data.data;
     } catch (error) {
       console.log(error);
@@ -141,10 +133,7 @@ export class Robin {
   async createConversation(data: Conversation) {
     try {
       let response = await axios.post(this.baseUrl + '/chat/conversation', data);
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -157,10 +146,7 @@ export class Robin {
       let response = await axios.get(
         this.baseUrl + `/chat/conversation/messages/${id}/${userToken}?limit=${limit}&page${page}`
       );
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -192,10 +178,7 @@ export class Robin {
         }
       );
 
-      if (response.data.error) {
-        return undefined
-      }
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -209,10 +192,8 @@ export class Robin {
         requester_token: requesterToken
       }
       let response = await axios.delete(this.baseUrl + '/chat/message/', {data:body});
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
