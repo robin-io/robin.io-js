@@ -32,32 +32,54 @@ export class Robin {
   tls?: boolean | false;
   baseUrl: string;
   wsUrl: string;
+  env?: string | "production"
 
   retries: number;
   isConnected!: boolean;
 
   // tls? : deprecated will always connect via https
-  constructor(apiKey: string, tls?: boolean, retries?: number) {
+  constructor(apiKey: string, tls?: boolean, retries?: number, env?: string) {
     this.apiKey = apiKey;
     this.tls = tls == undefined ? true : tls;
     this.retries = retries == undefined ? 0 : retries;
     this.isConnected = false;
+    this.env = env = undefined ? "production": env;
 
     axios.defaults.headers.common['x-api-key'] = this.apiKey;
 
+    var url, wsurl;
+
+    switch (this.env) {
+      case "production":
+        url = 'api.robinapp.co/api/v1'
+        wsurl = 'api.robinapp.co/ws'
+        break;
+      case "dev":
+        url = '67.207.75.186/api/v1'
+        wsurl = '67.207.75.186/ws'
+        break;
+      default:
+        url = 'api.robinapp.co/api/v1'
+        wsurl = 'api.robinapp.co/ws'
+        break;
+    }
+
     if (tls) {
-      this.baseUrl = 'https://api.robinapp.co/api/v1';
-      this.wsUrl = 'wss://api.robinapp.co/ws';
+      this.baseUrl = `https://${url}`;
+      this.wsUrl = `wss://${wsurl}`;
     } else {
-      this.baseUrl = 'http://api.robinapp.co/api/v1';
-      this.wsUrl = 'ws://api.robinapp.co/ws';
+      this.baseUrl = `http://${url}`;
+      this.wsUrl = `ws://${wsurl}`;
     }
   }
 
   async createUserToken(data: UserToken) {
     try {
       let response = await axios.post(this.baseUrl + '/chat/user_token', data);
-      return response.data;
+      if (response.data.error) {
+        return undefined;
+      }
+      return response.data.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -84,12 +106,16 @@ export class Robin {
     }
   }
 
-  async getUserToken(data: UserToken) {
+  async getUserToken(data: UserToken, limit: number, page: number) {
     try {
       let response = await axios.get(
-        this.baseUrl + '/chat/user_token/' + data.user_token
+        this.baseUrl + `/chat/user_token/${data.user_token}?limit=${limit}&page=${page}`
       );
-      return response.data;
+
+      if (response.data.error) {
+        return undefined;
+      }
+      return response.data.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -102,7 +128,10 @@ export class Robin {
         this.baseUrl + '/chat/user_token/' + data.user_token,
         data
       );
-      return response.data;
+      if (response.data.error) {
+        return undefined;
+      }
+      return response.data.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -111,8 +140,11 @@ export class Robin {
 
   async createConversation(data: Conversation) {
     try {
-      let response = await axios.post(this.baseUrl + '/conversation', data);
-      return response.data;
+      let response = await axios.post(this.baseUrl + '/chat/conversation', data);
+      if (response.data.error) {
+        return undefined;
+      }
+      return response.data.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -120,12 +152,15 @@ export class Robin {
   }
 
 
-  async getConversationMessages(id: string, userToken: string) {
+  async getConversationMessages(id: string, userToken: string, limit: number, page: number) {
     try {
       let response = await axios.get(
-        this.baseUrl + `/conversation/messages/${id}/${userToken}`
+        this.baseUrl + `/chat/conversation/messages/${id}/${userToken}?limit=${limit}&page${page}`
       );
-      return response.data;
+      if (response.data.error) {
+        return undefined;
+      }
+      return response.data.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -148,15 +183,19 @@ export class Robin {
     }
   }
 
-  async searchConversation(id: string, text: string) {
+  async searchConversation(id: string, text: string, limit: number, page: number) {
     try {
       let response = await axios.post(
-        this.baseUrl + '/chat/search/message/' + id,
+        this.baseUrl + `/chat/search/message/${id}?limit=${limit}&page=${page}`,
         {
           text: text,
         }
       );
-      return response.data;
+
+      if (response.data.error) {
+        return undefined
+      }
+      return response.data.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -170,7 +209,10 @@ export class Robin {
         requester_token: requesterToken
       }
       let response = await axios.delete(this.baseUrl + '/chat/message/', {data:body});
-      return response.data;
+      if (response.data.error) {
+        return undefined;
+      }
+      return response.data.data;
     } catch (error) {
       console.log(error);
       return undefined;
