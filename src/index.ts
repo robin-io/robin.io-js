@@ -55,8 +55,8 @@ export class Robin {
         wsurl = 'api.robinapp.co/ws'
         break;
       case "dev":
-        url = '67.207.75.186/api/v1'
-        wsurl = '67.207.75.186/ws'
+        url = 'dev.robinapp.io/api/v1'
+        wsurl = 'dev.robinapp.io/ws'
         break;
       default:
         url = 'api.robinapp.co/api/v1'
