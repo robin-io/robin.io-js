@@ -55,8 +55,8 @@ export class Robin {
         wsurl = 'api.robinapp.co/ws'
         break;
       case "dev":
-        url = '67.207.75.186/api/v1'
-        wsurl = '67.207.75.186/ws'
+        url = 'dev.robinapp.io/api/v1'
+        wsurl = 'dev.robinapp.io/ws'
         break;
       default:
         url = 'api.robinapp.co/api/v1'
@@ -76,10 +76,8 @@ export class Robin {
   async createUserToken(data: UserToken) {
     try {
       let response = await axios.post(this.baseUrl + '/chat/user_token', data);
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -112,10 +110,7 @@ export class Robin {
         this.baseUrl + `/chat/user_token/${data.user_token}?limit=${limit}&page=${page}`
       );
 
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -128,9 +123,6 @@ export class Robin {
         this.baseUrl + '/chat/user_token/' + data.user_token,
         data
       );
-      if (response.data.error) {
-        return undefined;
-      }
       return response.data.data;
     } catch (error) {
       console.log(error);
@@ -141,10 +133,7 @@ export class Robin {
   async createConversation(data: Conversation) {
     try {
       let response = await axios.post(this.baseUrl + '/chat/conversation', data);
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -157,10 +146,7 @@ export class Robin {
       let response = await axios.get(
         this.baseUrl + `/chat/conversation/messages/${id}/${userToken}?limit=${limit}&page${page}`
       );
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -192,10 +178,7 @@ export class Robin {
         }
       );
 
-      if (response.data.error) {
-        return undefined
-      }
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -209,10 +192,8 @@ export class Robin {
         requester_token: requesterToken
       }
       let response = await axios.delete(this.baseUrl + '/chat/message/', {data:body});
-      if (response.data.error) {
-        return undefined;
-      }
-      return response.data.data;
+      
+      return response.data;
     } catch (error) {
       console.log(error);
       return undefined;
@@ -424,7 +405,7 @@ export class Robin {
     }
   }
 
-  async sendMessageAttachment(user_token: string, conversation_id: string, file: File, senderName?: string, msg?: string){
+  async sendMessageAttachment(user_token: string, conversation_id: string, file: File, senderName?: string, msg?: string, localId?: string){
     let fd = new FormData()
 
     fd.append("sender_token", user_token)
@@ -432,6 +413,7 @@ export class Robin {
     fd.append("conversation_id", conversation_id)
     fd.append("msg", msg!)
     fd.append("file", file)
+    fd.append("local_id", localId!)
 
     try {
       let response = await axios.post(
@@ -445,7 +427,7 @@ export class Robin {
     }
   }
 
-  async replyMessageWithAttachment(user_token: string, conversation_id: string, message_id: string, file: File, senderName?: string, msg?: string){
+  async replyMessageWithAttachment(user_token: string, conversation_id: string, message_id: string, file: File, senderName?: string, msg?: string, localId?: string){
     let fd = new FormData()
 
     fd.append("sender_token", user_token)
@@ -454,6 +436,7 @@ export class Robin {
     fd.append("message_id", message_id)
     fd.append("msg", msg!)
     fd.append("file", file)
+    fd.append("local_id", localId!)
 
     try {
       let response = await axios.post(
