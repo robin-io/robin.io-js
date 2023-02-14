@@ -411,7 +411,7 @@ export class Robin {
     }
   }
 
-  async sendMessageAttachment (user_token: string, conversation_id: string, file: File, senderName?: string, msg?: string, localID?: string) {
+  async sendMessageAttachment (user_token: string, conversation_id: string, file: File, senderName?: string, msg?: string, localID?: string, isVoiceNote?: boolean) {
     const fd = new FormData()
 
     fd.append('sender_token', user_token)
@@ -420,6 +420,7 @@ export class Robin {
     fd.append('msg', msg!)
     fd.append('file', file)
     fd.append('local_id', localID!)
+    fd.append('is_voice_note', `${isVoiceNote ?? false}`)
 
     try {
       const response = await axios.post(
