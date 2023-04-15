@@ -10,7 +10,7 @@ export interface UserToken {
 
 export interface Conversation {
   sender_name: string;
-  sender_token: string;
+  sender_token?: string;
   receiver_token: string;
   receiver_name: string;
 }
@@ -37,6 +37,7 @@ export class Robin {
 
   retries: number;
   isConnected!: boolean;
+  sessionToken: string | undefined;
 
   // tls? : deprecated will always connect via https
   constructor (apiKey: string, tls?: boolean, retries?: number, env?: string) {
@@ -74,6 +75,28 @@ export class Robin {
     }
   }
 
+  async GetSession(userToken: string) {
+    try {
+      let data = {
+        user_token: userToken
+      }
+      const response = await axios.post(this.baseUrl + '/session/get/auth', data)
+
+      if (response.data.error) {
+        throw new Error(response.data.error)
+      }
+
+      axios.defaults.headers.common['x-robin-session'] = response.data.token
+
+      this.sessionToken = response.data.token
+
+      return response.data.token
+
+    } catch (error) {
+      throw error
+    }
+  }
+
   async createUserToken (data: UserToken) {
     try {
       const response = await axios.post(this.baseUrl + '/chat/user_token', data)
@@ -107,10 +130,10 @@ export class Robin {
     }
   }
 
-  async getUserToken (data: UserToken, limit: number, page: number) {
+  async getUserToken (limit: number, page: number) {
     try {
       const response = await axios.get(
-        this.baseUrl + `/chat/user_token/${data.user_token}?limit=${limit}&page=${page}`
+        this.baseUrl + `/chat/user_token?limit=${limit}&page=${page}`
       )
 
       return response.data
@@ -123,7 +146,7 @@ export class Robin {
   async syncUserToken (data: UserToken) {
     try {
       const response = await axios.put(
-        this.baseUrl + '/chat/user_token/' + data.user_token,
+        this.baseUrl + '/chat/user_token',
         data
       )
       if (response.data.error) {
@@ -147,10 +170,10 @@ export class Robin {
     }
   }
 
-  async getConversationMessages (id: string, userToken: string, limit: number, page: number) {
+  async getConversationMessages (id: string, limit: number, page: number) {
     try {
       const response = await axios.get(
-        this.baseUrl + `/chat/conversation/messages/${id}/${userToken}?limit=${limit}&page=${page}`
+        this.baseUrl + `/chat/conversation/messages/${id}?limit=${limit}&page=${page}`
       )
       return response.data
     } catch (error) {
@@ -159,12 +182,11 @@ export class Robin {
     }
   }
 
-  async getConversationMessagesByTimestamp (id: string, userToken: string, start: Date, end: Date) {
+  async getConversationMessagesByTimestamp (id: string, start: Date, end: Date) {
     try {
       const response = await axios.post(
         this.baseUrl + `/chat/conversation/message/timestamp/${id}`,
         {
-          user_token: userToken,
           start: start,
           end: end
         }
@@ -195,11 +217,10 @@ export class Robin {
     }
   }
 
-  async deleteMessages (ids: string[], requesterToken: string) {
+  async deleteMessages (ids: string[]) {
     try {
       const body = {
         ids: ids,
-        requester_token: requesterToken
       }
       const response = await axios.delete(this.baseUrl + '/chat/message/', { data: body })
       if (response.data.error) {
@@ -212,9 +233,9 @@ export class Robin {
     }
   }
 
-  async deleteAllMessages (conversation_id: string, requesterToken: string) {
+  async deleteAllMessages (conversation_id: string) {
     try {
-      const response = await axios.delete(this.baseUrl + `/chat/conversation/delete/messages/${conversation_id}/${requesterToken}`)
+      const response = await axios.delete(this.baseUrl + `/chat/conversation/delete/messages/${conversation_id}`)
       if (response.data.error) {
         return undefined
       }
@@ -227,7 +248,6 @@ export class Robin {
 
   async createGroupConversation (
     name: string,
-    moderator: UserToken,
     participants: UserToken[]
   ) {
     try {
@@ -235,7 +255,6 @@ export class Robin {
         this.baseUrl + '/chat/conversation/group',
         {
           name,
-          moderator,
           participants
         }
       )
@@ -291,10 +310,10 @@ export class Robin {
     }
   }
 
-  async archiveConversation (id: string, userToken: string) {
+  async archiveConversation (id: string) {
     try {
       const response = await axios.put(
-        this.baseUrl + `/chat/conversation/archive/${id}/${userToken}`
+        this.baseUrl + `/chat/conversation/archive/${id}`
       )
 
       return response.data
@@ -304,10 +323,10 @@ export class Robin {
     }
   }
 
-  async getArchivedConversation (data: UserToken, limit: number, page: number) {
+  async getArchivedConversation (limit: number, page: number) {
     try {
       const response = await axios.get(
-        this.baseUrl + `/chat/conversation/archived/${data.user_token}?page=${page}&limit=${limit}`
+        this.baseUrl + `/chat/conversation/archived?page=${page}&limit=${limit}`
       )
 
       return response.data
@@ -317,10 +336,10 @@ export class Robin {
     }
   }
 
-  async unarchiveConversation (id: string, userToken: string) {
+  async unarchiveConversation (id: string) {
     try {
       const response = await axios.put(
-        this.baseUrl + `/chat/conversation/unarchive/${id}/${userToken}`
+        this.baseUrl + `/chat/conversation/unarchive/${id}`
       )
 
       return response.data
@@ -330,15 +349,14 @@ export class Robin {
     }
   }
 
-  async forwardMessages (user_token: string, message_ids: string[], conversation_ids: string[], senderName?: string) {
+  async forwardMessages (message_ids: string[], conversation_ids: string[], senderName?: string) {
     try {
-      if (user_token.length === 0 || message_ids.length === 0 || conversation_ids.length === 0) {
+      if (message_ids.length === 0 || conversation_ids.length === 0) {
         return
       }
       const response = await axios.post(
         this.baseUrl + '/chat/conversation/forward_messages',
         {
-          user_token: user_token,
           message_ids: message_ids,
           conversation_ids: conversation_ids,
           sender_name: senderName
@@ -352,8 +370,8 @@ export class Robin {
     }
   }
 
-  connect (user_token: string, max_retries?: number): WebSocket {
-    const conn = new WS(`${this.wsUrl}/${this.apiKey}/${user_token}`)
+  connect (max_retries?: number): WebSocket {
+    const conn = new WS(`${this.wsUrl}?auth=${this.sessionToken}`)
 
     conn.onopen = function () {
       this.isConnected = true
@@ -364,7 +382,7 @@ export class Robin {
       max_retries = max_retries === undefined ? 5 : max_retries
 
       while (this.retries < max_retries) {
-        this.connect(user_token, 5)
+        this.connect(5)
       }
     }
 
@@ -388,7 +406,7 @@ export class Robin {
 
   async reactToMessage (reaction: string, conversation_id: string, message_id: string, sender_token: string) {
     try {
-      const response = await axios.post(this.baseUrl + `/chat/message/reaction/${message_id}/${sender_token}`, {
+      const response = await axios.post(this.baseUrl + `/chat/message/reaction/${message_id}`, {
         user_token: sender_token,
         reaction: reaction,
         conversation_id: conversation_id,
@@ -411,10 +429,9 @@ export class Robin {
     }
   }
 
-  async sendMessageAttachment (user_token: string, conversation_id: string, file: File, senderName?: string, msg?: string, localID?: string, isVoiceNote?: boolean) {
+  async sendMessageAttachment (conversation_id: string, file: File, senderName?: string, msg?: string, localID?: string, isVoiceNote?: boolean) {
     const fd = new FormData()
 
-    fd.append('sender_token', user_token)
     fd.append('sender_name', senderName!)
     fd.append('conversation_id', conversation_id)
     fd.append('msg', msg!)
@@ -434,10 +451,9 @@ export class Robin {
     }
   }
 
-  async replyMessageWithAttachment (user_token: string, conversation_id: string, message_id: string, file: File, senderName?: string, msg?: string, localID?: string) {
+  async replyMessageWithAttachment (conversation_id: string, message_id: string, file: File, senderName?: string, msg?: string, localID?: string) {
     const fd = new FormData()
 
-    fd.append('sender_token', user_token)
     fd.append('sender_name', senderName!)
     fd.append('conversation_id', conversation_id)
     fd.append('message_id', message_id)
@@ -484,12 +500,11 @@ export class Robin {
     }
   }
 
-  async sendReadReceipts (message_ids: string[], conversation_id: string, user_token: string) {
+  async sendReadReceipts (message_ids: string[], conversation_id: string) {
     try {
       const response = await axios.post(this.baseUrl + '/chat/message/read/receipt', {
         message_ids: message_ids,
         conversation_id: conversation_id,
-        user_token: user_token
       })
       return response.data
     } catch (error) {
@@ -498,11 +513,9 @@ export class Robin {
     }
   }
 
-  async starMessage (message_id: string, user_token: string) {
+  async starMessage (message_id: string) {
     try {
-      const response = await axios.post(this.baseUrl + '/chat/message/' + message_id, {
-        user_token: user_token
-      })
+      const response = await axios.post(this.baseUrl + '/chat/message/star' + message_id)
       return response.data
     } catch (error) {
       console.log(error)
@@ -510,9 +523,9 @@ export class Robin {
     }
   }
 
-  async getStarredMessages (user_token: string) {
+  async getStarredMessages () {
     try {
-      const response = await axios.get(this.baseUrl + '/chat/message/' + user_token)
+      const response = await axios.get(this.baseUrl + '/chat/message/star')
       return response.data
     } catch (error) {
       console.log(error)
@@ -520,9 +533,9 @@ export class Robin {
     }
   }
 
-  async deleteConversation (user_token: string, conversation_id: string) {
+  async deleteConversation (conversation_id: string) {
     try {
-      const response = await axios.delete(this.baseUrl + `/chat/conversation/delete/${conversation_id}/${user_token}`)
+      const response = await axios.delete(this.baseUrl + `/chat/conversation/delete/${conversation_id}`)
       return response.data
     } catch (error) {
       console.log(error)
@@ -530,9 +543,9 @@ export class Robin {
     }
   }
 
-  async getConversationDetails (conversation_id: string, user_token: string) {
+  async getConversationDetails (conversation_id: string) {
     try {
-      const response = await axios.get(this.baseUrl + `/chat/conversation/details/${conversation_id}/${user_token}`)
+      const response = await axios.get(this.baseUrl + `/chat/conversation/details/${conversation_id}`)
       return response.data
     } catch (error) {
       console.log(error)
@@ -557,13 +570,13 @@ export class Robin {
     }
   }
 
-  async uploadDisplayPhoto (user_token: string, photo: string) {
+  async uploadDisplayPhoto (photo: string) {
     const fd = new FormData()
 
     fd.append('display_photo', photo)
 
     try {
-      const response = await axios.put(this.baseUrl + '/chat/user_token/display_photo/' + user_token, fd)
+      const response = await axios.put(this.baseUrl + '/chat/user_token/display_photo', fd)
       return response.data
     } catch (error) {
       console.log(error)
