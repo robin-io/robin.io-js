@@ -40,14 +40,19 @@ export class Robin {
   sessionToken: string | undefined;
 
   // tls? : deprecated will always connect via https
-  constructor (apiKey: string, tls?: boolean, retries?: number, env?: string) {
+  constructor (apiKey: string, tls?: boolean, retries?: number, env?: string, sessionToken?: string) {
     this.apiKey = apiKey
     this.tls = tls === undefined ? true : tls
     this.retries = retries === undefined ? 0 : retries
     this.isConnected = false
     this.env = env === undefined ? 'production' : env
+    this.sessionToken = sessionToken === undefined ? '' : sessionToken
 
     axios.defaults.headers.common['x-api-key'] = this.apiKey
+    
+    if (this.sessionToken != '') {
+      axios.defaults.headers.common['x-robin-session'] = this.sessionToken
+    }
 
     let url, wsurl
 
