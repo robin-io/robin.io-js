@@ -567,6 +567,16 @@ export class Robin {
     }
   }
 
+  async getUnreadConversations() {
+    try {
+      const response = await axios.get(this.baseUrl + '/chat/conversation/unread')
+      return response.data
+    } catch (error) {
+      console.log(error)
+      return undefined
+    }
+  }
+
   async deleteConversation(conversation_id: string) {
     try {
       const response = await axios.delete(this.baseUrl + `/chat/conversation/delete/${conversation_id}`)
