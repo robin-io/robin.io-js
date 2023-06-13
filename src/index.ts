@@ -162,7 +162,7 @@ export class Robin {
   ) {
     try {
       const response = await axios.post(
-        this.baseUrl + `/chat/user_token?limit=${limit}&page=${page}`, {
+        this.baseUrl + `/chat/user_token/get?limit=${limit}&page=${page}`, {
         username_starts_with: username_query || '',
         user_tokens_filter: user_tokens_filter || [],
         meta_data_key_filter: filter_by_metadata?.metadata_key || '',
