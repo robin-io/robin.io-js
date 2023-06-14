@@ -587,6 +587,16 @@ export class Robin {
     }
   }
 
+  async getConversation(conversation_id: string) {
+    try {
+      const response = await axios.get(this.baseUrl + `/chat/conversation/get/${conversation_id}`)
+      return response.data
+    } catch (error) {
+      console.log(error)
+      return undefined
+    }
+  }
+
   async getConversationDetails(conversation_id: string) {
     try {
       const response = await axios.get(this.baseUrl + `/chat/conversation/details/${conversation_id}`)
